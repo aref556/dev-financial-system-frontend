@@ -1,0 +1,19 @@
+.dropdown-item {
+    cursor: pointer;
+  }
+  
+  .app-header .app-header__logo {
+    /* background-image: linear-gradient(to left, #654ea3, #eaafc8); */
+    background-image: linear-gradient(to left, #39049b, #011092);
+    font-family: 'Antonio', sans-serif;
+  }
+  
+  .app-header .app-nav {
+    /* background-image: linear-gradient(to right, #654ea3, #eaafc8); */
+    background-image: linear-gradient(to right, #33138a, #200b9b);
+  }
+  
+  .app-header {
+    background-color: #1127a3;
+    padding: 0%;
+  }
