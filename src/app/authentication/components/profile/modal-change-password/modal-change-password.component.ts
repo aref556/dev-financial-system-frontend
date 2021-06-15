@@ -45,9 +45,5 @@ export class ModalChangePasswordComponent implements InModalChangePasswordCompon
     })
   }
 
-  // private toggleShow() {
-  //   this.showPassword = !this.showPassword;
-  //   this.input.type = this.showPassword ? 'text' : 'password';
-  // }
 }
 

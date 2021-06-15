@@ -28,67 +28,63 @@ export class ProfileComponent implements InProfileComponent {
   userLogin: InAccount;
   modalRef: BsModalRef<any>;
   onSubmit() {
-    if (this.form.invalid)
-      return this.alert.some_err_humen();
+    if (this.form.invalid) return this.alert.some_err_humen();
     // console.log('api to update Profile');
-    try {
-      this.account
-        .onUpdateProfile(this.authen.getAuthenticated(), this.form.value)
-        .then(() => {
-          this.alert.notify(`อัปเดทโปรไฟล์สำเร็จ`, 'info');
-        })
-        .catch(err => {
-          this.alert.notify(`${err.Message}`);
-        });
+    // try {
+    this.account
+      .onUpdateProfile(this.authen.getAuthenticated(), this.form.value)
+      .then(() => {
+        this.alert.notify(`อัปเดทโปรไฟล์สำเร็จ`, 'info');
+      })
+      .catch(err => {
+        this.alert.notify(`${err.Message}`);
+      });
 
-    } catch (err) {
-      this.alert.notify(`Profile component [function onSubmit] : ${err.Message}`);
-    }
+    // } catch (err) {
+    //   this.alert.notify(`Profile component [function onSubmit] : ${err.Message}`);
+    // }
 
 
   }
 
   openModal(template: TemplateRef<any>) {
-    try {
-      this.modalRef = this.modalService.show(template);
+    // try {
+    this.modalRef = this.modalService.show(template);
 
-    } catch (err) {
-      this.alert.notify(`function openModal : ` + err.Message);
-      console.log(`function openModal : ` + err.Message);
-    }
+    // } catch (err) {
+    //   this.alert.notify(`function openModal : ` + err.Message);
+    //   console.log(`function openModal : ` + err.Message);
+    // }
 
   }
 
   private initialCreateFormData() {
-    try {
-      this.form = this.builder.group({
-        username: ['', Validators.required],
-        firstname: ['', Validators.required],
-        lastname: ['', Validators.required],
-        position: ['', Validators.required],
-      })
+    // try {
+    this.form = this.builder.group({
+      username: ['', Validators.required],
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      position: ['', Validators.required],
+    })
 
-    } catch (err) {
-      this.alert.notify(`function initialCreateFormData : ` + err.Message);
-      console.log(`function initialCreateFormData : ` + err.Message);
-    }
+    // } catch (err) {
+    //   this.alert.notify(`function initialCreateFormData : ` + err.Message);
+    //   console.log(`function initialCreateFormData : ` + err.Message);
+    // }
 
   }
 
   private async initialLoadUpdateFormData() {
-    try {
-      const user = await this.account.getUserLogin(this.authen.getAuthenticated());
-      // console.log('****');
-      // console.log(user);
-      this.form.controls['username'].setValue(user.username);
-      this.form.controls['firstname'].setValue(user.firstname);
-      this.form.controls['lastname'].setValue(user.lastname);
-      this.form.controls['position'].setValue(user.position);
-      // console.log(this.form.value.username);
-    } catch (err) {
-      this.alert.notify('function initialLoadUpdateFormData : ' + err.Message);
-      console.log(`function initialLoadUpdateFormData : ` + err.Message);
-    }
+    // try {
+    const user = await this.account.getUserLogin(this.authen.getAuthenticated());
+    this.form.controls['username'].setValue(user.username);
+    this.form.controls['firstname'].setValue(user.firstname);
+    this.form.controls['lastname'].setValue(user.lastname);
+    this.form.controls['position'].setValue(user.position);
+    // } catch (err) {
+    //   this.alert.notify('function initialLoadUpdateFormData : ' + err.Message);
+    //   console.log(`function initialLoadUpdateFormData : ` + err.Message);
+    // }
   }
 
   getRoleName(role: InRoleAccount) {

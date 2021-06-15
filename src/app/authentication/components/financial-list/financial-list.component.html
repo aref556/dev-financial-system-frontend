@@ -2,7 +2,7 @@
     <div class="app-title">
         <div>
             <h1>
-                <i class="fa fa-users"></i> รายการเอกสารทางการเงิน
+                <i class="bi bi-card-checklist"></i> แสดงรายการการชำระเงิน
             </h1>
             <p>หน้าแสดงรายการ เอกสาร ค้นหา ลบ และ เรียกดูเอกสาร</p>
         </div>
@@ -36,22 +36,10 @@
                                 </ul>
                             </div>
 
-                            <!-- <div class="row">
-                                <div class="col-xs-12 col-12 col-md-4 form-group">
-
-                                </div>
-                                <div class="col-xs-12 col-12 col-md-4 form-group">
-                                    <input type="text" placeholder="Daterangepicker" class="form-control" placeholder=""
-                                        bsDaterangepicker [bsConfig]="{ adaptivePosition: true }">
-                                </div>
-                            </div> -->
-
                             <div [ngSwitch]="searchType.key">
                                 <input *ngSwitchCase="'updated'" type="date" [(ngModel)]="searchText"
                                     placeholder="ค้นหาข้อมูล" class="form-control">
                                 <!-- เลือกผู้ส่ง -->
-
-                                <!-- <pre class="card card-block card-header">Model: {{myForm.value.state | json}}</pre> -->
                                 <form [formGroup]="myForm">
                                     <input *ngSwitchCase="'type'" [typeahead]="states" formControlName="state"
                                         [typeaheadOptionsLimit]="7" [typeaheadMinLength]="0"
@@ -60,8 +48,16 @@
 
                                 <input *ngSwitchCase="'date'" type="date" [(ngModel)]="searchText"
                                     placeholder="ค้นหาข้อมูล" class="form-control">
-                                <!-- <input *ngSwitchCase="'type'" type="text" [(ngModel)]="searchText" class="form-control"
-                                    placeholder="ค้นหาข้อมูล"> -->
+
+                                <input *ngSwitchCase="'beetween'" bsDaterangepicker placement="left" type="text"
+                                    [(ngModel)]="searchText" class="form-control" placeholder="ค้นหาข้อมูล">
+
+                                <form [formGroup]="statusForm">
+                                    <input *ngSwitchCase="'status'" [typeahead]="status" formControlName="status"
+                                        [typeaheadOptionsLimit]="2" [typeaheadMinLength]="0"
+                                        placeholder="กรุณากรอกข้อมูล" class="form-control">
+                                </form>
+
                                 <input *ngSwitchDefault type="text" [(ngModel)]="searchText" class="form-control"
                                     placeholder="ค้นหาข้อมูล">
                             </div>
@@ -71,6 +67,7 @@
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -81,13 +78,13 @@
                             <thead>
                                 <tr>
                                     <th>หมายเลขเอกสาร</th>
-                                    <th>ชื่อ/ที่อยู่ลูกค้า</th>
+                                    <th>ชื่อ / ที่อยู่ลูกค้า</th>
                                     <th>สถานะการดำเนินงาน</th>
                                     <th>ประเภทเอกสาร</th>
                                     <th>ประเภทของรายได้</th>
                                     <th>ผู้สร้างเอกสาร</th>
-                                    <th>วันที่</th>
-                                    <th>การจัดการ  <br>(อนุมัติ/ดูไฟล์/ลบ)</th>
+                                    <th>วันที่สร้างเอกสาร</th>
+                                    <th style="text-align: center;">การจัดการ <br>(อนุมัติ / ดูไฟล์ / ลบ)</th>
 
                                     <th></th>
                                 </tr>
@@ -104,11 +101,23 @@
                                     <td>{{ item.created_by }}</td>
                                     <td>{{ item.created_time | date : 'dd-MM-yyyy' }}</td>
                                     <td class="text-center">
-                                        <i (click)="openModal(template, item)" class="fa fa-paper-plane cur"
-                                            aria-hidden="true">&nbsp;/&nbsp;</i>
-                                        <i (click)="onLookDocument(item)" class="fa fa-file cur"
-                                            aria-hidden="true">&nbsp;/&nbsp;</i>
-                                        <i (click)="onDeleteDocument(item)" class="fa fa-trash cur">&nbsp;&nbsp;</i>
+                                        <button (click)="openModal(template, item)" class="btn btn-primary"
+                                            type="button">
+                                            <i class="bi bi-pencil-square" style="font-size: large;"></i>
+                                            
+                                        </button>
+                                        &nbsp;&nbsp;
+                                        <button (click)="onLookDocument(item)" class="btn btn-info"
+                                            type="button">
+                                            <i class="bi bi-file-earmark-pdf-fill" style="font-size: large;"></i>
+                                            
+                                        </button>
+                                        &nbsp;&nbsp;
+                                        <button (click)="onDeleteDocument(item)" class="btn btn-danger"
+                                            type="button">
+                                            <i class="bi bi-trash-fill" style="font-size: large;" ></i>
+                                            
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>

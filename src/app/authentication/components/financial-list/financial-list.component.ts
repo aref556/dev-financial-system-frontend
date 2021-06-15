@@ -27,14 +27,14 @@ export class FinancialListComponent implements InFinancialListComponent {
     private detect: ChangeDetectorRef,
     private account: AccountService,
     private authen: AuthenService,
-    // private localeService: BsLocaleService,
+    private localeService: BsLocaleService,
     private pdf: PdfService,
     private modalService: BsModalService,
 
 
   ) {
     // เปลี่ยน Dateoicker เป็นภาษาไทย
-    // this.localeService.use('th');
+    this.localeService.use('th');
     // โหลดข้อมูลเอกสาร
     this.initialLoadDocuments({
       startPage: this.startPage,
@@ -58,6 +58,11 @@ export class FinancialListComponent implements InFinancialListComponent {
         this.searchText = '3';
       if (type == this.states[3])
         this.searchText = '4';
+
+      if (type == this.status[0])
+        this.searchText = '1';
+      if (type == this.status[1])
+        this.searchText = '2';
     } catch (err) {
       this.alert.notify(`convertType: ` + err.Message);
     }
@@ -77,6 +82,13 @@ export class FinancialListComponent implements InFinancialListComponent {
     `บันทึกข้อความ`,
   ];
 
+  statusCtrl = new FormControl();
+  statusForm = new FormGroup({
+    status: this.statusCtrl
+  });
+
+  status = ['กำลังดำเนินการ', 'ดำเนินการเสร็จสิ้น']
+
   modalRef: BsModalRef<any>;
 
 
@@ -89,7 +101,8 @@ export class FinancialListComponent implements InFinancialListComponent {
     { key: 'id_doc', value: 'ค้นหาจากหมายเลขเอกสาร' },
     { key: 'date', value: 'ค้นหาจากวันที่ในเอกสาร' },
     { key: 'updated', value: 'ค้นหาจากวันที่สร้างเอกสาร' },
-
+    { key: 'status', value: 'ค้นหาจากสถานะการดำเนินการ' },
+    { key: 'beetween', value: 'ค้นหาแบบช่วงวันที่' },
   ];
   // ตัวแปร pagination
   startPage: number = 1;
@@ -118,20 +131,20 @@ export class FinancialListComponent implements InFinancialListComponent {
 
   // ค้นหาข้อมูล
   onSearchItem(): void {
-    try {
-      this.startPage = 1;
-      this.initialLoadDocuments({
-        searchText: this.getSearchText,
-        searchType: this.searchType.key,
-        startPage: this.startPage,
-        limitPage: this.limitPage
-      });
-      //กระตุ้น Event
-      this.detect.detectChanges();
-    } catch (err) {
-      this.alert.notify(`function onSearchItem: ` + err.Message);
-      console.log(`function onSearchItem: ` + err.Message);
-    }
+    // try {
+    this.startPage = 1;
+    this.initialLoadDocuments({
+      searchText: this.getSearchText,
+      searchType: this.searchType.key,
+      startPage: this.startPage,
+      limitPage: this.limitPage
+    });
+    //กระตุ้น Event
+    this.detect.detectChanges();
+    // } catch (err) {
+    //   this.alert.notify(`function onSearchItem: ` + err.Message);
+    //   console.log(`function onSearchItem: ` + err.Message);
+    // }
 
   }
 
@@ -172,8 +185,6 @@ export class FinancialListComponent implements InFinancialListComponent {
   }
 
   onDeleteDocument(item: InDocument): void {
-    // this.alert.askConfirm().then(status => {
-    //   if (!status) return;
     this.alert.askConfirm_v2().then(res => {
       if (res) {
         this.document
@@ -193,96 +204,75 @@ export class FinancialListComponent implements InFinancialListComponent {
       else
         return;
     });
-
-    // });
   }
 
   async onLookDocument(item: InDocument) {
-    try {
-      const doc = await this.document.getDocumentById(item.id);
-      const doc_string = JSON.stringify(doc);
-      const doc_object = JSON.parse(doc_string);
-      if (doc.type == 1) {
-        // const docInvoice: InInvoice = doc_object;
-        await this.pdf.generateInvoice(doc_object as InInvoice);
-      }
-      if (doc.type == 2) {
-        await this.pdf.generateInvoiceDocs(doc_object as InInvoiceDocument);
-      }
-      if (doc.type == 3) {
-        await this.pdf.generateDelivery(doc_object as InDelivery);
-      }
-      if (doc.type == 4) {
-        await this.pdf.generateMessageMemos(doc_object as InMessageMemos);
-      }
-
-    } catch (error) {
-      this.alert.notify(error.Message);
+    // try {
+    const doc = await this.document.getDocumentById(item.id);
+    const doc_string = JSON.stringify(doc);
+    const doc_object = JSON.parse(doc_string);
+    if (doc.type == 1) {
+      await this.pdf.generateInvoice(doc_object as InInvoice);
     }
+    if (doc.type == 2) {
+      await this.pdf.generateInvoiceDocs(doc_object as InInvoiceDocument);
+    }
+    if (doc.type == 3) {
+      await this.pdf.generateDelivery(doc_object as InDelivery);
+    }
+    if (doc.type == 4) {
+      await this.pdf.generateMessageMemos(doc_object as InMessageMemos);
+    }
+    // } catch (error) {
+    //   this.alert.notify(error.Message);
+    // }
   }
 
-  // onSuccessStatus(item: InDocument, template: TemplateRef<>) {
-  //   // const doc = await this.document.updateFlagStatus(item.id);
-
-  // }
-
   openModal(template: TemplateRef<any>, item: InDocument) {
-    try {
-      localStorage.setItem('id_select', item.id);
-      this.modalRef = this.modalService.show(template);
+    // try {
+    localStorage.setItem('id_select', item.id);
+    this.modalRef = this.modalService.show(template);
 
 
-    } catch (err) {
-      this.alert.notify(`function openModal : ` + err.Message);
-      console.log(`function openModal : ` + err.Message);
-    }
+    // } catch (err) {
+    //   this.alert.notify(`function openModal : ` + err.Message);
+    //   console.log(`function openModal : ` + err.Message);
+    // }
 
   }
 
   private get getSearchText() {
-    try {
-      let responseSearchText = null;
-      switch (this.searchType.key) {
-        case 'type':
-          // console.log(this.myForm.value.state);
-          this.convertType(this.myForm.value.state);
-          responseSearchText = InRoleDocument[parseInt(this.searchText)] || '';
-          break;
-        case 'date':
-          // const searchDate: { from: Date, to: Date } = { from: this.searchText[0], to: this.searchText[1] } as any;
-          // searchDate.from.setHours(0);
-          // searchDate.from.setMinutes(0);
-          // searchDate.from.setSeconds(0);
-          // searchDate.to.setHours(23);
-          // searchDate.to.setMinutes(59);
-          // searchDate.to.setSeconds(59);
-          // responseSearchText = searchDate;
-          // break;
-          // console.log(this.searchText);
-          responseSearchText = this.searchText;
-          break;
-        case 'updated':
-          // const searchDate: { from: Date, to: Date } = { from: this.searchText[0], to: this.searchText[1] } as any;
-          // searchDate.from.setHours(0);
-          // searchDate.from.setMinutes(0);
-          // searchDate.from.setSeconds(0);
-          // searchDate.to.setHours(23);
-          // searchDate.to.setMinutes(59);
-          // searchDate.to.setSeconds(59);
-          // responseSearchText = searchDate;
-          // break;
-          // console.log(this.searchText);
-          responseSearchText = this.searchText;
-          break;
-        default:
-          responseSearchText = this.searchText;
-          break;
-      }
-      return responseSearchText;
-
-    } catch (err) {
-      this.alert.notify(`getSearch: ` + err.Message);
+    // try {
+    let responseSearchText = null;
+    switch (this.searchType.key) {
+      case 'type':
+        // console.log(this.myForm.value.state);
+        this.convertType(this.myForm.value.state);
+        responseSearchText = this.searchText;
+        break;
+      case 'status':
+        this.convertType(this.statusForm.value.status);
+        responseSearchText = this.searchText;
+        break;
+      case 'beetween':
+        const searchDate: { from: Date, to: Date } = { from: this.searchText[0], to: this.searchText[1] } as any;
+        searchDate.from.setHours(0);
+        searchDate.from.setMinutes(0);
+        searchDate.from.setSeconds(0);
+        searchDate.to.setHours(23);
+        searchDate.to.setMinutes(59);
+        searchDate.to.setSeconds(59);
+        responseSearchText = searchDate;
+        break;
+      default:
+        responseSearchText = this.searchText;
+        break;
     }
+    return responseSearchText;
+
+    // } catch (err) {
+    //   this.alert.notify(`getSearch: ` + err.Message);
+    // }
 
   }
 
@@ -294,7 +284,7 @@ export class FinancialListComponent implements InFinancialListComponent {
         this.items = items;
         // console.log(this.items);
       })
-      .catch(err => this.alert.notify(`initialLoadDoc: ` + err.Message));
+      .catch(err => this.alert.notify(err.Message));
   }
 
   // โหลดข้อมูลผู้ใช้ที่ยัง Login

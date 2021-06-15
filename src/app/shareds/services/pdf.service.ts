@@ -106,24 +106,6 @@ export class PdfService {
 
     }
 
-
-
-    // async generatePdf() {
-    //     await this.loadPdfMaker();
-    //     const def = {
-    //         content: [
-    //             'หกดหกดหกด',
-    //             '\n',
-    //             'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines',
-    //         ],
-    //         defaultStyle: {
-    //             font: "Sarabun",
-    //             fontSize: 16,
-    //         }
-    //     }
-    //     this.pdfMake.createPdf(def).open();
-    // }
-
     //สร้างใบส่งของ
     async generateDelivery(model: InDelivery) {
         await this.loadPdfMaker();
@@ -1691,149 +1673,149 @@ export class PdfService {
 
 
     //ทดสอบการสร้างเอกสาร
-    async generateTesting() {
-        await this.loadPdfMaker();
-        try {
-            let str_message_end = "จึงเรียนมาเพื่อโปรดดำเนินการ โดยโอนเงินเข้าบัญชี สำนักนวัตกรรมดิจิทัล และระบบอัจฉริยะ 2 เลขที่บัญชี 565-2-45084-7 ธนาคารไทยพาณิชย์ จำกัด (มหาชน) สาขา มหาวิทยาลัยสงขลานครินทร์ และกรุณาส่งสำเนาใบโอนเงินให้สำนักนวัตกรรมดิจิทัลและระบบ อัจฉริยะทราบ เพื่อดำเนินการออกใบเสร็จรับเงินต่อไป จักขอบคุณยิ่ง"
+    // async generateTesting() {
+    //     await this.loadPdfMaker();
+    //     try {
+    //         let str_message_end = "จึงเรียนมาเพื่อโปรดดำเนินการ โดยโอนเงินเข้าบัญชี สำนักนวัตกรรมดิจิทัล และระบบอัจฉริยะ 2 เลขที่บัญชี 565-2-45084-7 ธนาคารไทยพาณิชย์ จำกัด (มหาชน) สาขา มหาวิทยาลัยสงขลานครินทร์ และกรุณาส่งสำเนาใบโอนเงินให้สำนักนวัตกรรมดิจิทัลและระบบ อัจฉริยะทราบ เพื่อดำเนินการออกใบเสร็จรับเงินต่อไป จักขอบคุณยิ่ง"
 
-            const docDefinition = {
-                content: [
-                    {
-                        columns: [
-                            {
-                                image: await this.img,
-                                width: 36,
-                                height: 57.6,
-                            },
-                            {
-                                width: 200,
-                                text: `\nบันทึกข้อความ`,
-                                font: 'PSU',
-                                bold: true,
-                                fontSize: 22,
-                            }
+    //         const docDefinition = {
+    //             content: [
+    //                 {
+    //                     columns: [
+    //                         {
+    //                             image: await this.img,
+    //                             width: 36,
+    //                             height: 57.6,
+    //                         },
+    //                         {
+    //                             width: 200,
+    //                             text: `\nบันทึกข้อความ`,
+    //                             font: 'PSU',
+    //                             bold: true,
+    //                             fontSize: 22,
+    //                         }
 
-                        ],
-                        columnGap: 130,
+    //                     ],
+    //                     columnGap: 130,
 
-                    },
-                    {
+    //                 },
+    //                 {
 
-                        width: 250,
-                        text: [
-                            {
-                                text: `ส่วนงาน`,
-                                font: 'PSU',
-                                bold: true,
-                                fontSize: 16,
-                            },
-                            {
-                                text: `  สำนักงานนวัตกรรมดิจิทัลและระบบอัจฉริยะ  โทร. 2102`,
-                                font: 'PSU',
-                                fontSize: 16,
-                            }
-                        ],
-                    },
-                    {
-                        columns: [
-                            {
-                                text: [
-                                    {
-                                        text: `ที่`,
-                                        font: `PSU`,
-                                        fontSize: 16,
-                                        bold: true,
-                                    },
-                                    {
-                                        text: ` มอ 011/{model.id_doc}`,
-                                        font: `PSU`,
-                                        fontSize: 16,
+    //                     width: 250,
+    //                     text: [
+    //                         {
+    //                             text: `ส่วนงาน`,
+    //                             font: 'PSU',
+    //                             bold: true,
+    //                             fontSize: 16,
+    //                         },
+    //                         {
+    //                             text: `  สำนักงานนวัตกรรมดิจิทัลและระบบอัจฉริยะ  โทร. 2102`,
+    //                             font: 'PSU',
+    //                             fontSize: 16,
+    //                         }
+    //                     ],
+    //                 },
+    //                 {
+    //                     columns: [
+    //                         {
+    //                             text: [
+    //                                 {
+    //                                     text: `ที่`,
+    //                                     font: `PSU`,
+    //                                     fontSize: 16,
+    //                                     bold: true,
+    //                                 },
+    //                                 {
+    //                                     text: ` มอ 011/{model.id_doc}`,
+    //                                     font: `PSU`,
+    //                                     fontSize: 16,
 
-                                    }
-                                ],
+    //                                 }
+    //                             ],
 
-                            },
-                            {
-                                text: `{str_date}`,
-                                font: 'PSU',
-                                fontSize: 16,
-                            }
+    //                         },
+    //                         {
+    //                             text: `{str_date}`,
+    //                             font: 'PSU',
+    //                             fontSize: 16,
+    //                         }
 
-                        ],
-                        columGap: 10,
-                    },
-                    {
-                        text: [
-                            {
-                                text: `เรื่อง`,
-                                font: 'PSU',
-                                fontSize: 16,
-                                bold: true,
-                            },
-                            {
-                                text: `  {model.title}`,
-                                font: 'PSU',
-                                fontSize: 16,
-                            }
-                        ],
-                    },
-                    {
-                        text: [
-                            {
-                                text: `เรียน`,
-                                font: 'PSU',
-                                fontSize: 16,
-                                bold: true,
-                            },
-                            {
-                                text: `   {model.title_to}`,
-                                font: 'PSU',
-                                fontSize: 16,
-                            }
-                        ],
-                    },
-                    {
+    //                     ],
+    //                     columGap: 10,
+    //                 },
+    //                 {
+    //                     text: [
+    //                         {
+    //                             text: `เรื่อง`,
+    //                             font: 'PSU',
+    //                             fontSize: 16,
+    //                             bold: true,
+    //                         },
+    //                         {
+    //                             text: `  {model.title}`,
+    //                             font: 'PSU',
+    //                             fontSize: 16,
+    //                         }
+    //                     ],
+    //                 },
+    //                 {
+    //                     text: [
+    //                         {
+    //                             text: `เรียน`,
+    //                             font: 'PSU',
+    //                             fontSize: 16,
+    //                             bold: true,
+    //                         },
+    //                         {
+    //                             text: `   {model.title_to}`,
+    //                             font: 'PSU',
+    //                             fontSize: 16,
+    //                         }
+    //                     ],
+    //                 },
+    //                 {
 
-                        text: `\u200b \t \t \t {model.message}`,
-                        font: 'PSU',
-                        fontSize: 16,
+    //                     text: `\u200b \t \t \t {model.message}`,
+    //                     font: 'PSU',
+    //                     fontSize: 16,
 
-                    },
-                    {
+    //                 },
+    //                 {
 
-                        text: `\u200b \t \t \t ${str_message_end}`,
-                        font: 'PSU',
-                        fontSize: 16,
-                    },
-                    {
-                        text: `\n \n \n ({model.guarantor})`,
-                        font: 'PSU',
-                        fontSize: 16,
-                        margin: [222, 2, 10, 2],
-                    },
-                    {
-                        text: `{model.guarantor_position}`,
-                        font: 'PSU',
-                        fontSize: 16,
-                        margin: [89.85, 2, 10, 20],
-                        alignment: "center",
-                    },
-                ],
-                pageSize: 'A4',
-                pageOrientation: 'portrait',
-                pageMargins: [89.85, 28.35, 70.9, 28.35],
+    //                     text: `\u200b \t \t \t ${str_message_end}`,
+    //                     font: 'PSU',
+    //                     fontSize: 16,
+    //                 },
+    //                 {
+    //                     text: `\n \n \n ({model.guarantor})`,
+    //                     font: 'PSU',
+    //                     fontSize: 16,
+    //                     margin: [222, 2, 10, 2],
+    //                 },
+    //                 {
+    //                     text: `{model.guarantor_position}`,
+    //                     font: 'PSU',
+    //                     fontSize: 16,
+    //                     margin: [89.85, 2, 10, 20],
+    //                     alignment: "center",
+    //                 },
+    //             ],
+    //             pageSize: 'A4',
+    //             pageOrientation: 'portrait',
+    //             pageMargins: [89.85, 28.35, 70.9, 28.35],
 
-            };
-            this.alert.notify('สร้างฟอร์มสำเร็จ', 'info');
+    //         };
+    //         this.alert.notify('สร้างฟอร์มสำเร็จ', 'info');
 
-            this.pdfMake.createPdf(docDefinition).open();
-            return true;
+    //         this.pdfMake.createPdf(docDefinition).open();
+    //         return true;
 
-        } catch (err) {
-            this.alert.notify(`function generateTesting : ` + err.Message);
-        }
+    //     } catch (err) {
+    //         this.alert.notify(`function generateTesting : ` + err.Message);
+    //     }
 
-    }
+    // }
 }
 
 // ฟังก์ชั่นแปลงตัวเลขเป็นคำอ่านภาษาไทย

@@ -19,8 +19,6 @@ export class InvoiceComponent implements InInvoiceComponent {
     private service: FinancialDocumentService,
   ) {
     this.initialCreateFormData();
-    // console.log(this.forwarderSelect[0]);
-    // this.pdf.generateTesting();
   }
   type_income_select: TypeIncome = { id: 0, type: 'ไม่เลือกประเภทของรายได้' };
   type_income: TypeIncome[] = [
@@ -56,6 +54,8 @@ export class InvoiceComponent implements InInvoiceComponent {
     { id: 30, type: 'เงินรับฝากค่าโทรศัพท์' },
     { id: 31, type: 'เงินรับฝาก-ค่าบริการอินเทอร์เน็ตล่วงหน้า' },
     { id: 32, type: 'เงินรับฝาก-ค่ามัดจำอุปกรณ์บริการอินเทอร์เน็ต' },
+    { id: 33, type: 'อื่นๆ' },
+
 
   ];
   forwarder_select: ForwarderSelect = { id: 2, name: 'นางเนาวรัตน์ สอิด', job_position: 'หัวหน้าฝ่ายบริหารจัดการ สำนักนวัตกรรมดิจิตอลและระบบอัจฉริยะ' };
@@ -68,21 +68,21 @@ export class InvoiceComponent implements InInvoiceComponent {
   form: FormGroup;
   doc: InInvoice;
 
+  flag_select: boolean = false;
+
   onSubmit() {
     if (this.form.invalid) this.alert.some_err_humen();
+    if (this.form.value['type_income'] == null || this.form.value['type_income'] == '') this.form.get('type_income').setValue('ไม่เลือกประเภทของรายได้');
     this.doc = this.form.value;
     this.doc.type = 1;
     this.doc.forwarder = this.forwarder_select.name;
     this.doc.forwarder_position = this.forwarder_select.job_position;
-    this.doc.type_income = this.type_income_select.type;
     try {
-      if (this.doc.product_detail_2 != '' || this.doc.product_number_2 != null || this.doc.product_prize_2 != null) {
-        if (this.doc.product_detail_2 != '' && this.doc.product_number_2 != null && this.doc.product_prize_2 != null) {
+      if (this.doc.product_detail_2 != '' || this.doc.product_detail_2 != null || this.doc.product_number_2 != null || this.doc.product_prize_2 != null) {
+        if (this.doc.product_detail_2 != '' && this.doc.product_detail_2 != null && this.doc.product_number_2 != null && this.doc.product_prize_2 != null) {
           this.pdf.generateInvoice(this.doc)
             .then(res => {
-              if (res) {
-                this.service.onCreateInvoice(this.doc);
-              }
+              this.service.onCreateInvoice(this.doc);
             })
             .catch(err => {
               this.alert.notify(err.Message);
@@ -95,24 +95,29 @@ export class InvoiceComponent implements InInvoiceComponent {
       else {
         this.pdf.generateInvoice(this.doc)
           .then(res => {
-            if (res) {
-              this.service.onCreateInvoice(this.doc);
-            }
+
+            this.service.onCreateInvoice(this.doc);
+
           })
           .catch(err => {
             this.alert.notify(err.Message);
           })
       }
-
     } catch (err) {
       this.alert.notify(`Invoice onSubmit: ` + err.Message);
-
     }
 
   }
 
-  onSelectType(select: TypeIncome): void {
-    this.type_income_select = select;
+  onSelectType(select: TypeIncome) {
+    if (select.id == 33) {
+      this.flag_select = true;
+      this.form.get('type_income').setValue(null);
+    }
+    else {
+      this.flag_select = false;
+      this.form.get('type_income').setValue(select.type);
+    }
   }
 
   // สร้างฟอร์ม
@@ -129,6 +134,7 @@ export class InvoiceComponent implements InInvoiceComponent {
       product_prize_1: ['', Validators.required],
       product_prize_2: [null],
       date: ['', Validators.required],
+      type_income: [null],
     });
   }
 

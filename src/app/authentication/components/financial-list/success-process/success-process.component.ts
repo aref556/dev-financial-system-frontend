@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { AppURL } from 'src/app/app.url';
+import { AuthURL } from 'src/app/authentication/authentication.url';
 import { FinancialDocumentService} from 'src/app/authentication/services/financial-document.service';
 import { AlertService } from 'src/app/shareds/services/alert.service';
 import { InSuccessProcessComponent } from './success-process.interface';
@@ -38,6 +40,7 @@ export class SuccessProcessComponent implements InSuccessProcessComponent {
         this.alert.notify(`ดำเนินการเสร็จสิ้น`, 'info');
         localStorage.removeItem('id_select');
         window.location.reload();
+        // this.router.navigate(['/', AppURL.Authen , AuthURL.Financials]);
       })
       .catch(err => {
         this.alert.notify(err.Message);
@@ -50,7 +53,7 @@ export class SuccessProcessComponent implements InSuccessProcessComponent {
     this.form = this.builder.group({
       success_time: ['', Validators.required],
       success_id_doc: ['', Validators.required],
-      note: ['', Validators.required],
+      note: [''],
     })
   }
 

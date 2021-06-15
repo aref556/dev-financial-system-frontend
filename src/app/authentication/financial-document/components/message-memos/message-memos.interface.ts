@@ -9,6 +9,7 @@ export interface InMessageMemosComponent {
     forwarder_select: ForwarderSelect;
     type_income: TypeIncome[];
     type_income_select: TypeIncome;
+    flag_select: boolean;
 
     onSubmit(): void;
     onSelectType(select: TypeIncome): void;

@@ -12,8 +12,8 @@ export class HttpService {
 
     // แอดเดรสที่เชื่อมต่อกับ Backend
 
-    private address: string = 'http://192.168.105.36:3540/';
-    // private address: string = 'http://localhost:3540/';
+    // private address: string = 'http://192.168.105.36:3540/';
+    private address: string = 'http://localhost:3540/';
 
     // ส่งข้อมูลแบบ method Get
     requestGet(url: string, accessToken?: string) {

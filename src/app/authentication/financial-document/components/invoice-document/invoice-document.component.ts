@@ -18,13 +18,10 @@ export class InvoiceDocumentComponent implements InInvoiceDocumentComponent {
   constructor(
     private pdf: PdfService,
     private alert: AlertService,
-    private router: Router,
-    private account: AccountService,
     private builder: FormBuilder,
     private service: FinancialDocumentService,
   ) {
     this.initialCreateFormData();
-    // this.pdf.generateTesting();
   }
 
   type_income_select: TypeIncome = { id: 0, type: 'ไม่เลือกประเภทของรายได้' };
@@ -61,10 +58,19 @@ export class InvoiceDocumentComponent implements InInvoiceDocumentComponent {
     { id: 30, type: 'เงินรับฝากค่าโทรศัพท์' },
     { id: 31, type: 'เงินรับฝาก-ค่าบริการอินเทอร์เน็ตล่วงหน้า' },
     { id: 32, type: 'เงินรับฝาก-ค่ามัดจำอุปกรณ์บริการอินเทอร์เน็ต' },
+    { id: 33, type: 'อื่นๆ' },
 
   ];
-  onSelectType(select: TypeIncome): void {
-    this.type_income_select = select;
+
+  onSelectType(select: TypeIncome) {
+    if (select.id == 33) {
+      this.flag_select = true;
+      this.form.get('type_income').setValue(null);
+    }
+    else {
+      this.flag_select = false;
+      this.form.get('type_income').setValue(select.type);
+    }
   }
 
   form: FormGroup;
@@ -76,30 +82,23 @@ export class InvoiceDocumentComponent implements InInvoiceDocumentComponent {
     { id: 2, name: 'นางเนาวรัตน์ สอิด', job_position: 'หัวหน้าฝ่ายบริหารจัดการ สำนักนวัตกรรมดิจิตอลและระบบอัจฉริยะ' },
   ];
 
+  flag_select: boolean = false;
+
   onSubmit() {
     if (this.form.invalid) return this.alert.some_err_humen();
+    if (this.form.value['type_income'] == null || this.form.value['type_income'] == '') this.form.get('type_income').setValue('ไม่เลือกประเภทของรายได้');
     this.doc = this.form.value;
     this.doc.type = 2;
     this.doc.guarantor = this.forwarder_select.name;
     this.doc.guarantor_position = this.forwarder_select.job_position;
-    this.doc.type_income = this.type_income_select.type;
     // console.log(this.doc);
     this.pdf.generateInvoiceDocs(this.doc)
       .then(res => {
-        if (res) {
-          this.service.onCreateInvoiceDocument(this.doc);
-        }
+        this.service.onCreateInvoiceDocument(this.doc);
       })
       .catch(err => {
         this.alert.notify(`invoice-document onSubmit(): ` + err.Message);
       })
-
-    // this.account
-    //   .onCreateFinancialDocument(this.form.value)
-    //   .then(res => {
-    //     this.alert.notify('สร้างฟอร์มสำเร็จ', 'Info');
-    //   })
-    //   .catch(err => this.alert.notify(err.Message));
   }
 
 
@@ -119,6 +118,8 @@ export class InvoiceDocumentComponent implements InInvoiceDocumentComponent {
       message_end: [''],
       manager_name: [''],
       manager_position: [''],
+      type_income: [null],
+
 
     });
   }

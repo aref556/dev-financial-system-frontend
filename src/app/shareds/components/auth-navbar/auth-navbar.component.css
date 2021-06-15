@@ -4,13 +4,13 @@
   
   .app-header .app-header__logo {
     /* background-image: linear-gradient(to left, #654ea3, #eaafc8); */
-    background-image: linear-gradient(to left, #39049b, #011092);
+    background-image: linear-gradient(to left, #2335d3, #07049b);
     font-family: 'Antonio', sans-serif;
   }
   
   .app-header .app-nav {
     /* background-image: linear-gradient(to right, #654ea3, #eaafc8); */
-    background-image: linear-gradient(to right, #33138a, #200b9b);
+    background-image: linear-gradient(to right, #3504b9, #404ce9);
   }
   
   .app-header {

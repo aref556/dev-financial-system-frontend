@@ -57,12 +57,6 @@ export class AccountService {
                 return this.setUserLogin(userLogin);
             });
     }
-
-    // onSuccessProcess(accessToken: string, model: InSuccessProcess) {
-    //     return this.http
-    //         .requestPost(`api/document/accept-document`, model, accessToken)
-    //         .toPromise() as Promise<{ status: boolean }>;
-    // }
 }
 
 export interface InAccount {

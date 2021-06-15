@@ -7,6 +7,7 @@ export interface InInvoiceComponent {
     forwarder_select: ForwarderSelect;
     type_income: TypeIncome[];
     type_income_select: TypeIncome;
+    flag_select: boolean;
 
     onSubmit(): void;
     onSelectType(select: TypeIncome): void;
@@ -51,9 +52,3 @@ export interface TypeIncome {
     id: number;
     type: string;
 }
-//ข้อมูลปรเภทของเอกสารแจ้งการชำระเงิน
-// export enum RoleDocument {
-//     Invoice = 1,
-//     InvoiceDocument = 2,
-//     Delivery = 3,
-// }

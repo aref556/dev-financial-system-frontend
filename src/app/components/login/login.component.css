@@ -5,18 +5,6 @@
     background-size: cover;
 
 }
-
-/* .material-half-bg .cover {
-  background-image: linear-gradient(to left, #363795, #005C97);
-} */
-
-/* .login-content {
-    background-image: url('https://i.pinimg.com/originals/72/40/55/724055733047bec21ad96ce4dad37013.jpg');
-    background-image: url('https://www.icegif.com/wp-content/uploads/among-us-icegif-1.gif'); 
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  } */
   
   
   .login-box {
@@ -67,7 +55,7 @@
   
   .form-group .btn {
     /* background-image: linear-gradient(to left, #363795, #005C97); */
-    background-image: linear-gradient(to left, #45B649, #DCE35B);
+    background-image: linear-gradient(to left, #456db6, #5bb8e3);
     /* background-image: linear-gradient(to left, #e52d27, #b31217); */
     border: none;
     font-size: 20px;

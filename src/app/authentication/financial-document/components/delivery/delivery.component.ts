@@ -22,7 +22,6 @@ export class DeliveryComponent implements InDeliveryComponent {
     private service: FinancialDocumentService,
   ) {
     this.initialCreateFormData();
-    // this.pdf.generateTesting();
   }
   type_income_select: TypeIncome = { id: 0, type: 'ไม่เลือกประเภทของรายได้' };
   type_income: TypeIncome[] = [
@@ -58,6 +57,7 @@ export class DeliveryComponent implements InDeliveryComponent {
     { id: 30, type: 'เงินรับฝากค่าโทรศัพท์' },
     { id: 31, type: 'เงินรับฝาก-ค่าบริการอินเทอร์เน็ตล่วงหน้า' },
     { id: 32, type: 'เงินรับฝาก-ค่ามัดจำอุปกรณ์บริการอินเทอร์เน็ต' },
+    { id: 33, type: 'อื่นๆ' }
 
   ];
   forwarder_select: ForwarderSelect = { id: 2, name: 'นางเนาวรัตน์ สอิด', job_position: 'หัวหน้าฝ่ายบริหารจัดการ สำนักนวัตกรรมดิจิตอลและระบบอัจฉริยะ' };
@@ -68,16 +68,18 @@ export class DeliveryComponent implements InDeliveryComponent {
   ];
   form: FormGroup;
   doc: InDelivery;
+  
+  flag_select: boolean = false;
+
   onSubmit(): void {
     if (this.form.invalid) this.alert.some_err_humen();
+    if (this.form.value['type_income'] == null || this.form.value['type_income'] == '') this.form.get('type_income').setValue('ไม่เลือกประเภทของรายได้');
     this.doc = this.form.value;
     this.doc.type = 3;
-    this.doc.type_income = this.type_income_select.type;
     this.doc.forwarder = this.forwarder_select.name;
     this.doc.forwarder_position = this.forwarder_select.job_position;
-    this.doc.type_income = this.type_income_select.type;
-    if (this.doc.product_detail_2 != '' || this.doc.product_number_2 != null || this.doc.product_prize_2 != null) {
-      if (this.doc.product_detail_2 != '' && this.doc.product_number_2 != null && this.doc.product_prize_2 != null) {
+    if (this.doc.product_detail_2 != '' || this.doc.product_detail_2 != null || this.doc.product_number_2 != null || this.doc.product_prize_2 != null) {
+      if (this.doc.product_detail_2 != '' && this.doc.product_detail_2 != null && this.doc.product_number_2 != null && this.doc.product_prize_2 != null) {
         this.pdf.generateDelivery(this.doc);
         this.service.onCreateDelivery(this.doc);
       }
@@ -88,9 +90,7 @@ export class DeliveryComponent implements InDeliveryComponent {
     else {
       this.pdf.generateDelivery(this.doc)
         .then(res => {
-          if (res) {
-            this.service.onCreateDelivery(this.doc);
-          }
+          this.service.onCreateDelivery(this.doc);
         })
         .catch(err => {
           this.alert.notify(err.Message);
@@ -102,8 +102,14 @@ export class DeliveryComponent implements InDeliveryComponent {
   }
 
   onSelectType(select: TypeIncome) {
-    this.type_income_select = select;
-    // console.log('id : '+ this.type_income_select.id + ' ประเภทรายได้ :' + this.type_income_select.type);
+    if (select.id == 33) {
+      this.flag_select = true;
+      this.form.get('type_income').setValue(null);
+    }
+    else {
+      this.flag_select = false;
+      this.form.get('type_income').setValue(select.type);
+    }
   }
 
   // สร้างฟอร์ม
@@ -121,6 +127,7 @@ export class DeliveryComponent implements InDeliveryComponent {
       product_prize_2: [null],
       prize_stand: ['', Validators.required],
       date: ['', Validators.required],
+      type_income: [null],
     });
   }
 

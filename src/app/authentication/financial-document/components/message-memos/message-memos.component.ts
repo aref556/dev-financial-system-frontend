@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { FinancialDocumentService } from 'src/app/authentication/services/financial-document.service';
 import { AlertService } from 'src/app/shareds/services/alert.service';
 import { PdfService } from 'src/app/shareds/services/pdf.service';
 import { InInvoiceDocument } from '../invoice-document/invoice-document.interface';
 import { ForwarderSelect, TypeIncome } from '../invoice/invoice.interface';
 import { InMessageMemosComponent } from './message-memos.interface';
+
 
 @Component({
   selector: 'app-message-memos',
@@ -19,8 +21,17 @@ export class MessageMemosComponent implements InMessageMemosComponent {
     private alert: AlertService,
     private builder: FormBuilder,
     private service: FinancialDocumentService,
+    private modalService: BsModalService,
   ) {
-    this.initialCreateFormData();
+    this.initialCreateFormData()
+  }
+
+
+
+  modalRef: BsModalRef;
+
+  async openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { show: true });
   }
 
   type_income_select: TypeIncome = { id: 0, type: 'ไม่เลือกประเภทของรายได้' };
@@ -57,12 +68,21 @@ export class MessageMemosComponent implements InMessageMemosComponent {
     { id: 30, type: 'เงินรับฝากค่าโทรศัพท์' },
     { id: 31, type: 'เงินรับฝาก-ค่าบริการอินเทอร์เน็ตล่วงหน้า' },
     { id: 32, type: 'เงินรับฝาก-ค่ามัดจำอุปกรณ์บริการอินเทอร์เน็ต' },
+    { id: 33, type: 'อื่นๆ' },
 
   ];
 
-  onSelectType(select: TypeIncome): void {
-    this.type_income_select = select;
+  onSelectType(select: TypeIncome) {
+    if (select.id == 33) {
+      this.flag_select = true;
+      this.form.get('type_income').setValue(null);
+    }
+    else {
+      this.flag_select = false;
+      this.form.get('type_income').setValue(select.type);
+    }
   }
+
 
   form: FormGroup;
   doc: InInvoiceDocument;
@@ -73,19 +93,19 @@ export class MessageMemosComponent implements InMessageMemosComponent {
     { id: 2, name: 'นางเนาวรัตน์ สอิด', job_position: 'หัวหน้าฝ่ายบริหารจัดการ สำนักนวัตกรรมดิจิตอลและระบบอัจฉริยะ' },
   ];
 
+  flag_select: boolean = false;
+
   onSubmit(): void {
     if (this.form.invalid) return this.alert.some_err_humen();
+    if (this.form.value['type_income'] == null || this.form.value['type_income'] == '') this.form.get('type_income').setValue('ไม่เลือกประเภทของรายได้');
     this.doc = this.form.value;
     this.doc.type = 4;
     this.doc.guarantor = this.forwarder_select.name;
     this.doc.guarantor_position = this.forwarder_select.job_position;
-    this.doc.type_income = this.type_income_select.type;
     // console.log(this.doc);
     this.pdf.generateMessageMemos(this.doc)
       .then(res => {
-        if (res) {
-          this.service.onCreateMessageMemos(this.doc);
-        }
+        this.service.onCreateMessageMemos(this.doc);
       })
       .catch(err => {
         this.alert.notify(err.Message);
@@ -101,6 +121,7 @@ export class MessageMemosComponent implements InMessageMemosComponent {
       title: ['', Validators.required],
       title_to: ['', Validators.required],
       message: ['', Validators.required],
+      type_income: [null],
     });
   }
 
